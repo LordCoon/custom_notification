@@ -2,7 +2,7 @@ include("include/SOVIETInstructions.txt");
 include("include/checkMoney.txt");
 include("config.txt");
 
-defineVariable(int, _scriptRunning_moneyCheckMediumRUB);
+defineVariable(char, _scriptRunning_moneyCheckMediumRUB);
 
 defineFunction(main, void)
 {
@@ -11,12 +11,8 @@ defineFunction(main, void)
 
 	while( 1 ? 1)
 	{
-		Script_Exists("moneyCheckMediumRUB.txt", _scriptRunning_moneyCheckMediumRUB);
+		CheckMoney(MONEY_NOTIFICATION_MEDIUM_LIMIT, 0, MONEY_NOTIFICATION_WARNING, MONEY_RESET_MULTIPLIER);
 
-		if(!(_scriptRunning_moneyCheckMediumRUB ? 1))
-		{
-			Script_StartNew("moneyCheckMediumRUB.txt");
-		}
 
         Script_Sleep(10.0);
 	}

@@ -1,21 +1,22 @@
 defineVariable(int, MONEY_NOTIFICATION_LOW_LIMIT);
-defineVariable(int, MONEY_NOTIFICATION_MIDDLE_LIMIT);
+defineVariable(int, MONEY_NOTIFICATION_MEDIUM_LIMIT);
 defineVariable(int, MONEY_NOTIFICATION_HIGH_LIMIT);
 
 defineVariable(int, MONEY_NOTIFICATION_WARNING);
-defineVariable(float, MONEY_NOTIFICATION_WARNING);
+defineVariable(float, MONEY_RESET_MULTIPLIER);
 
-defineFunction(InitConfig)
+defineFunction(InitConfig, void)
 {
     // Limit for showing notification when money go bellow 
     MONEY_NOTIFICATION_LOW_LIMIT = 10000;
-    MONEY_NOTIFICATION_MIDDLE_LIMIT = 25000;
+    MONEY_NOTIFICATION_MEDIUM_LIMIT = 25000;
     MONEY_NOTIFICATION_HIGH_LIMIT = 50000;
 
-    // Show notification or warning
+    // Show notification or warning 1 = Warning, 0 = Notification
     MONEY_NOTIFICATION_WARNING = 1;
 
-    // Show again only when you have more money then LIMIT * multiplier, when 0 it repeat every 5 days.
-    MONEY_SHOW_WHEN_MULTIPLIER = 1.5;
+    // Show warning/notification only when you have more money then LIMIT * multiplier, when 0 it repeat every 5 days.
+    MONEY_RESET_MULTIPLIER = 1.5;
 
+    returnVoid();
 }
