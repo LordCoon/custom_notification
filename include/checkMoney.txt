@@ -1,0 +1,114 @@
+defineVariable(int, _currentMoney);
+defineVariable(char[1000], _moneyNotification);
+defineVariable(vec3, _vector);
+
+defineVariable(int, _currentDay);
+defineVariable(int, _currentMonth);
+defineVariable(int, _currentYear);
+defineVariable(int, _currentDayOfYear);
+
+defineVariable(int, _lastCheckYear);
+defineVariable(int, _lastCheckDayOfYear);
+
+defineVariable(int, _showNotificationOnFail);
+
+defineFunction(CheckMoney, void, int: moneyLimit, int: isUSD, int: showWarning)
+{
+    if(!(_showNotificationOnFail ? 1 | _showNotificationOnFail ? 2))
+    {
+        _showNotificationOnFail = 0;
+    }
+    
+    Date_GetCurrentDate_D365Y(_currentDayOfYear, _currentDayOfYear);
+    Date_GetCurrentDate_DMY(_currentDay, _currentMonth, _currentYear);
+
+    if(_lastCheckYear ? currentYear & 4 < (currentDayOfYear - _lastCheckDayOfYear)) | 
+                ((_lastCheckYear + 1) ? currentYear & 360 > (_lastCheckDayOfYear - currentDayOfYear))
+    {
+        returnVoid();
+    }
+
+    _lastCheckDayOfYear = _currentDayOfYear;
+    _lastCheckYear = _currentYear;
+
+    if(isUSD ? 1)
+    {
+        Money_GetUSD(_currentMoney);
+    }
+    else()
+    {
+        Money_GetRUB(_currentMoney);
+    }
+
+    if(MONEY_SHOW_WHEN_MULTIPLIER ? 0)
+    {
+        _showNotificationOnFail = 1;
+    }
+    else()
+    {
+        if((MONEY_SHOW_WHEN_MULTIPLIER * moneyLimit) < _currentMoney)
+        {
+            _showNotificationOnFail = 1;
+        }
+    }
+
+    if(_currentMoney < moneyLimit & (_showNotificationOnFail ? 1 | _showNotificationOnFail ? 0))
+    {
+        _showNotificationOnFail = 2;
+        if(isUSD ? 1)
+        {
+            strcpy(_moneyNotification, "Careful, Your money (USD) went below ");
+        }
+        else()
+        {
+            strcpy(_moneyNotification, "Careful, Your money (RUB) went below ");
+        }
+        strcat(_moneyNotification, "went below ");
+        strcat(_moneyNotification, moneyLimit);
+        strcat(_moneyNotification, ".");
+        
+        if(showWarning ? 1)
+        {
+            if(isUSD ? 1)
+            {
+                Scenario_WindowWithImageTopLeft(
+                    "Low money",
+                    _moneyNotification,
+                    "dollar.png",
+                    1);
+            }
+            else()
+            {
+                Scenario_WindowWithImageTopLeft(
+                    "Low money",
+                    _moneyNotification,
+                    "rubble.png",
+                    1);
+            }
+
+            
+        }
+        else()
+        {
+            if(isUSD ? 1)
+            {
+                Notification_CreateNewStringPic(
+                    "Low money",
+                    "Careful, Your money (USD) went below limit.",
+                    "dollar.png",
+                    _vector);
+            }
+            else()
+            {
+                Notification_CreateNewStringPic(
+                    "Low money",
+                    "Careful, Your money (RUB) went below limit.",
+                    "rubble.png",
+                    _vector);
+            }
+
+
+            
+        }
+    }
+}

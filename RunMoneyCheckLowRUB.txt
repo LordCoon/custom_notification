@@ -1,0 +1,36 @@
+include("include/SOVIETInstructions.txt");
+include("include/checkMoney.txt");
+include("config.txt");
+
+defineVariable(int, _currentDayOfYear);
+defineVariable(int, _lastCheckDayOfYear);
+defineVariable(int, _scriptRunning_moneyCheckLowRUB);
+
+defineFunction(main, void)
+{
+	InitConstants();
+	InitConfig();
+
+	while( 1 ? 1)
+	{
+		Date_GetCurrentDate_D365Y(_currentDayOfYear, _currentDayOfYear);
+
+		if((_currentDayOfYear - _lastCheckDayOfYear) > 5)
+		{
+			_lastCheckDayOfYear = _currentDayOfYear;
+
+			Script_Exists("moneyCheckLowRUB.txt", _scriptRunning_moneyCheckLowRUB);
+
+			if(!(_scriptRunning_moneyCheckLowRUB ? 1))
+			{
+				Script_StartNew("moneyCheckLowRUB.txt");
+			}
+		}
+
+        Script_Sleep(10.0);
+	}
+
+	Window_ShowText("Script Ended because of error.");
+	
+	end();
+}
